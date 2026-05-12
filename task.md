@@ -1,0 +1,21 @@
+- [ ] Phase 1: Foundation & Authentication
+    - [ ] Initialize Next.js project with Tailwind CSS.
+    - [ ] Set up Firebase Auth, Firestore, and Storage.
+    - [ ] Implement Role-based Authentication Flow (Login, Signup, Role routing).
+    - [ ] Create base Dashboard Layouts (Sidebar navigation, Header).
+- [ ] Phase 2: Teacher Dashboard & Content Management
+    - [ ] Build UI for Teachers to upload Study Materials.
+    - [ ] Build UI for Teachers to create Assignments.
+    - [ ] Integrate Firebase Storage for file uploads and Firestore for metadata.
+- [ ] Phase 3: Student Dashboard & Assignment System
+    - [ ] Build Student Dashboard to view materials and assignments.
+    - [ ] Implement Assignment submission feature.
+    - [ ] Create Teacher view for reviewing submissions.
+- [ ] Phase 4: Unique AI Chatbot Integration
+    - [ ] Implement Next.js API route securely connecting to Claude API.
+    - [ ] Build the AI Chatbot UI in the Student Dashboard.
+    - [ ] Implement the Knowledge Gap Mapping prompt logic.
+- [ ] Phase 5: Analytics & Polish
+    - [ ] Create basic analytics charts for student performance and progress.
+    - [ ] Refine UI/UX for a premium, modern feel.
+    - [ ] Final testing and bug fixes.
