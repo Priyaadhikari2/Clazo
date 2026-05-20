@@ -73,9 +73,7 @@ export default function SignupPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
         <div className="flex flex-col items-center">
-          <div className="h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-            <BookOpen className="text-white h-6 w-6" />
-          </div>
+          <img src="/logo.png" alt="Clazo Logo" className="h-16 w-auto mb-2" />
           <h2 className="text-center text-3xl font-extrabold text-gray-900 dark:text-white">
             Join Clazo
           </h2>

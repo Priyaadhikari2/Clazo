@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Clazo - Education Platform",
   description: "AI-Powered Education Platform",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

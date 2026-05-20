@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, Sparkles, Target, Users } from "lucide-react";
 
@@ -8,11 +9,8 @@ export default function Home() {
       <nav className="fixed w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md z-50 border-b border-gray-100 dark:border-gray-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-2">
-              <div className="bg-blue-600 p-2 rounded-lg">
-                <BookOpen className="h-6 w-6 text-white" />
-              </div>
-              <span className="text-xl font-bold text-gray-900 dark:text-white">Clazo</span>
+            <div className="flex items-center">
+              <Image src="/logo.png" alt="Clazo Logo" width={120} height={40} className="h-10 w-auto" priority />
             </div>
             <div className="flex items-center gap-4">
               <Link href="/login" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors">

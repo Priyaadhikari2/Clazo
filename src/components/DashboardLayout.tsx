@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import { LogOut, Menu, X, BookOpen, Settings, User, Sparkles, Users, Shield, LayoutDashboard, ClipboardList, FileText } from "lucide-react";
 import Link from "next/link";
@@ -83,9 +84,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-30 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="h-full flex flex-col">
-          <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700">
-            <BookOpen className="h-6 w-6 text-blue-600 mr-2" />
-            <span className="text-xl font-bold text-gray-900 dark:text-white">Clazo</span>
+          <div className="h-16 flex items-center px-4 border-b border-gray-200 dark:border-gray-700">
+            <Image src="/logo.png" alt="Clazo Logo" width={100} height={32} className="h-8 w-auto" />
             <button 
               className="ml-auto lg:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
               onClick={() => setSidebarOpen(false)}
