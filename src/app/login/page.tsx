@@ -39,10 +39,9 @@ export default function LoginPage() {
       };
 
       localStorage.setItem(
-        "clazo-user",
+        "clazo_mock_profile",
         JSON.stringify(fakeUser)
       );
-
       if (role === "admin") {
         router.push("/admin/dashboard");
       } else if (role === "teacher") {
