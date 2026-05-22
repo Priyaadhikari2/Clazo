@@ -3,13 +3,19 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { User, TrendingUp, BookOpen, Clock, ChevronRight, Award } from "lucide-react";
-import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import {
+  User,
+  TrendingUp,
+  BookOpen,
+  Clock,
+  ChevronRight,
+  Award,
+} from "lucide-react";
 
 export default function ParentChildrenPage() {
   const { profile, loading: authLoading } = useAuth();
   const router = useRouter();
+
   const [childrenData, setChildrenData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,65 +26,67 @@ export default function ParentChildrenPage() {
   }, [profile, authLoading, router]);
 
   useEffect(() => {
-    const fetchChildren = async () => {
-      if (!profile?.profileData?.children?.length) {
-        setChildrenData([]);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const q = query(
-          collection(db, "users"),
-          where("uid", "in", profile.profileData.children)
-        );
-        const querySnapshot = await getDocs(q);
-        const fetched: any[] = [];
-        querySnapshot.forEach((doc) => {
-          fetched.push({ 
-            id: doc.id, 
-            ...doc.data(),
-            // Mocking some details that aren't in the user profile yet for rich UI
-            grade: "8th Grade",
-            avgScore: 87,
-            pendingAssignments: 2,
-            completedAssignments: 12,
-            lastActive: "Active Now",
-            subjects: [
-              { name: "Math", score: 92, progress: 85 },
-              { name: "Science", score: 88, progress: 90 },
-              { name: "History", score: 78, progress: 70 },
-            ]
-          });
-        });
-        setChildrenData(fetched);
-      } catch (err) {
-        console.error("Error fetching children:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (profile && profile.role === "parent") {
-      fetchChildren();
+      const mockChildren = [
+        {
+          id: "child-1",
+          name: "John Doe",
+          grade: "8th Grade",
+          avgScore: 87,
+          pendingAssignments: 2,
+          completedAssignments: 12,
+          lastActive: "Active Now",
+          subjects: [
+            { name: "Math", score: 92, progress: 85 },
+            { name: "Science", score: 88, progress: 90 },
+            { name: "History", score: 78, progress: 70 },
+          ],
+        },
+        {
+          id: "child-2",
+          name: "Emma Doe",
+          grade: "6th Grade",
+          avgScore: 91,
+          pendingAssignments: 1,
+          completedAssignments: 15,
+          lastActive: "5 mins ago",
+          subjects: [
+            { name: "English", score: 95, progress: 93 },
+            { name: "Science", score: 89, progress: 87 },
+            { name: "Art", score: 97, progress: 96 },
+          ],
+        },
+      ];
+
+      setChildrenData(mockChildren);
+      setLoading(false);
     }
   }, [profile]);
 
-  if (authLoading || loading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-    </div>
-  );
+  if (authLoading || loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
   if (!profile) return null;
 
   return (
-    <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">My Children</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Comprehensive view of your children&apos;s academic journey.</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            My Children
+          </h1>
+
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
+            Comprehensive view of your children&apos;s academic journey.
+          </p>
         </div>
-        <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg active:scale-95">
+
+        <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold transition-all">
           <Award className="h-4 w-4" />
           Request Report
         </button>
@@ -89,11 +97,16 @@ export default function ParentChildrenPage() {
           <div className="bg-gray-100 dark:bg-gray-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
             <User className="h-8 w-8" />
           </div>
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white">No children linked</h3>
+
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+            No children linked
+          </h3>
+
           <p className="text-gray-500 dark:text-gray-400 mt-1 max-w-sm mx-auto">
-            Please link your child's account from the dashboard to view their performance here.
+            Please link your child&apos;s account from the dashboard.
           </p>
-          <button 
+
+          <button
             onClick={() => router.push("/parent/dashboard")}
             className="mt-6 text-blue-600 font-bold hover:underline"
           >
@@ -103,82 +116,114 @@ export default function ParentChildrenPage() {
       ) : (
         <div className="grid grid-cols-1 gap-8">
           {childrenData.map((child) => (
-            <div key={child.id} className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden group hover:shadow-xl transition-all duration-300">
-              {/* Header Section */}
-              <div className="p-6 sm:p-8 border-b border-gray-50 dark:border-gray-700 bg-gradient-to-r from-gray-50/50 to-white dark:from-gray-800 dark:to-gray-800">
+            <div
+              key={child.id}
+              className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden"
+            >
+              <div className="p-6 sm:p-8 border-b border-gray-50 dark:border-gray-700">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                   <div className="flex items-center gap-6">
-                    <div className="relative">
-                      <div className="bg-blue-600 p-4 rounded-2xl text-white shadow-lg shadow-blue-200 dark:shadow-none group-hover:scale-105 transition-transform">
-                        <User className="h-8 w-8" />
-                      </div>
-                      <div className="absolute -bottom-1 -right-1 bg-green-500 h-4 w-4 rounded-full border-4 border-white dark:border-gray-800"></div>
+                    <div className="bg-blue-600 p-4 rounded-2xl text-white">
+                      <User className="h-8 w-8" />
                     </div>
+
                     <div>
-                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{child.name}</h2>
+                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                        {child.name}
+                      </h2>
+
                       <div className="flex items-center gap-3 mt-1">
-                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{child.grade}</span>
-                        <span className="h-1 w-1 bg-gray-300 dark:bg-gray-600 rounded-full"></span>
-                        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">Greenwood High</span>
+                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                          {child.grade}
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 px-4 py-2 rounded-full border border-gray-100 dark:border-gray-700">
+
+                  <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                     <Clock className="h-4 w-4" />
                     Last active: {child.lastActive}
                   </div>
                 </div>
               </div>
 
-              {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700">
-                <div className="p-6 sm:p-8 hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
+                <div className="p-6 sm:p-8">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg">
-                      <TrendingUp className="h-5 w-5" />
-                    </div>
-                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Avg. Proficiency</span>
+                    <TrendingUp className="h-5 w-5 text-green-600" />
+
+                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase">
+                      Avg. Proficiency
+                    </span>
                   </div>
-                  <p className="text-4xl font-black text-gray-900 dark:text-white">{child.avgScore}%</p>
+
+                  <p className="text-4xl font-black text-gray-900 dark:text-white">
+                    {child.avgScore}%
+                  </p>
                 </div>
-                <div className="p-6 sm:p-8 hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
+
+                <div className="p-6 sm:p-8">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-lg">
-                      <Clock className="h-5 w-5" />
-                    </div>
-                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">To-Do Items</span>
+                    <Clock className="h-5 w-5 text-orange-600" />
+
+                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase">
+                      To-Do Items
+                    </span>
                   </div>
-                  <p className="text-4xl font-black text-gray-900 dark:text-white">{child.pendingAssignments}</p>
+
+                  <p className="text-4xl font-black text-gray-900 dark:text-white">
+                    {child.pendingAssignments}
+                  </p>
                 </div>
-                <div className="p-6 sm:p-8 hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
+
+                <div className="p-6 sm:p-8">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
-                      <BookOpen className="h-5 w-5" />
-                    </div>
-                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Completed Tasks</span>
+                    <BookOpen className="h-5 w-5 text-blue-600" />
+
+                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase">
+                      Completed Tasks
+                    </span>
                   </div>
-                  <p className="text-4xl font-black text-gray-900 dark:text-white">{child.completedAssignments}</p>
+
+                  <p className="text-4xl font-black text-gray-900 dark:text-white">
+                    {child.completedAssignments}
+                  </p>
                 </div>
               </div>
 
-              {/* Subject Detail */}
-              <div className="p-6 sm:p-8 bg-gray-50/30 dark:bg-gray-900/20">
-                <h3 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-6">Subject Breakdown</h3>
+              <div className="p-6 sm:p-8 bg-gray-50 dark:bg-gray-900/20">
+                <h3 className="text-sm font-bold text-gray-400 uppercase mb-6">
+                  Subject Breakdown
+                </h3>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {child.subjects.map((sub: any) => (
-                    <div key={sub.name} className="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700">
+                    <div
+                      key={sub.name}
+                      className="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700"
+                    >
                       <div className="flex justify-between items-center mb-3">
-                        <span className="font-bold text-gray-900 dark:text-white">{sub.name}</span>
-                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400">{sub.score}%</span>
+                        <span className="font-bold text-gray-900 dark:text-white">
+                          {sub.name}
+                        </span>
+
+                        <span className="text-xs font-bold text-blue-600">
+                          {sub.score}%
+                        </span>
                       </div>
+
                       <div className="w-full bg-gray-100 dark:bg-gray-900 rounded-full h-1.5">
-                        <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: `${sub.progress}%` }}></div>
+                        <div
+                          className="bg-blue-600 h-1.5 rounded-full"
+                          style={{ width: `${sub.progress}%` }}
+                        ></div>
                       </div>
                     </div>
                   ))}
                 </div>
+
                 <div className="mt-8 flex justify-center">
-                  <button className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
+                  <button className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
                     View Detailed Academic Record
                     <ChevronRight className="h-4 w-4" />
                   </button>
